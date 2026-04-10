@@ -12,7 +12,7 @@ config.term = "xterm-256color"
 
 -- Use PowerShell on Windows
 if wezterm.target_triple:find("windows") then
-  config.default_prog = { "powershell.exe" }
+  config.default_prog = { "pwsh.exe" }
 end
 
 -- URL detection
