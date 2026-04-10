@@ -18,9 +18,6 @@ end
 -- URL detection
 config.hyperlink_rules = wezterm.default_hyperlink_rules()
 
--- Background opacity and macOS blur
-config.window_background_opacity = 0.95
-config.macos_window_background_blur = 20
 
 -- Key bindings
 config.keys = {
