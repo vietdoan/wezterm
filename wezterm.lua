@@ -10,6 +10,11 @@ config.color_scheme = "Catppuccin Mocha"
 config.scrollback_lines = 50000
 config.term = "xterm-256color"
 
+-- Use PowerShell on Windows
+if wezterm.target_triple:find("windows") then
+  config.default_prog = { "powershell.exe" }
+end
+
 -- URL detection
 config.hyperlink_rules = wezterm.default_hyperlink_rules()
 
