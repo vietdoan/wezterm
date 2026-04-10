@@ -18,6 +18,38 @@ end
 -- URL detection
 config.hyperlink_rules = wezterm.default_hyperlink_rules()
 
+-- Smart-splits integration: check IS_NVIM user var set by the Neovim plugin
+local function is_vim(pane)
+  return pane:get_user_vars().IS_NVIM == "true"
+end
+
+local direction_keys = {
+  h = "Left",
+  j = "Down",
+  k = "Up",
+  l = "Right",
+}
+
+local function split_nav(resize_or_move, key)
+  return {
+    key = key,
+    mods = resize_or_move == "resize" and "META" or "CTRL",
+    action = wezterm.action_callback(function(win, pane)
+      if is_vim(pane) then
+        win:perform_action({
+          SendKey = { key = key, mods = resize_or_move == "resize" and "META" or "CTRL" },
+        }, pane)
+      else
+        if resize_or_move == "resize" then
+          win:perform_action({ AdjustPaneSize = { direction_keys[key], 3 } }, pane)
+        else
+          win:perform_action({ ActivatePaneDirection = direction_keys[key] }, pane)
+        end
+      end
+    end),
+  }
+end
+
 
 -- Key bindings
 config.keys = {
@@ -46,28 +78,11 @@ config.keys = {
     action = act.SpawnTab("CurrentPaneDomain"),
   },
 
-  -- Smart pane navigation (Ctrl+h/j/k/l without leader)
-  -- Works seamlessly with Neovim when using smart-splits.nvim
-  {
-    key = "h",
-    mods = "CTRL",
-    action = act.ActivatePaneDirection("Left"),
-  },
-  {
-    key = "j",
-    mods = "CTRL",
-    action = act.ActivatePaneDirection("Down"),
-  },
-  {
-    key = "k",
-    mods = "CTRL",
-    action = act.ActivatePaneDirection("Up"),
-  },
-  {
-    key = "l",
-    mods = "CTRL",
-    action = act.ActivatePaneDirection("Right"),
-  },
+  -- Smart splits navigation (Ctrl+h/j/k/l) — seamless with Neovim
+  split_nav("move", "h"),
+  split_nav("move", "j"),
+  split_nav("move", "k"),
+  split_nav("move", "l"),
 
   -- Pane navigation with leader (fallback)
   { key = "h", mods = "LEADER", action = act.ActivatePaneDirection("Left") },
@@ -75,11 +90,11 @@ config.keys = {
   { key = "k", mods = "LEADER", action = act.ActivatePaneDirection("Up") },
   { key = "l", mods = "LEADER", action = act.ActivatePaneDirection("Right") },
 
-  -- Pane resize (Alt + h/j/k/l) — matches smart-splits.nvim resize keys
-  { key = "h", mods = "ALT", action = act.AdjustPaneSize({ "Left", 3 }) },
-  { key = "j", mods = "ALT", action = act.AdjustPaneSize({ "Down", 3 }) },
-  { key = "k", mods = "ALT", action = act.AdjustPaneSize({ "Up", 3 }) },
-  { key = "l", mods = "ALT", action = act.AdjustPaneSize({ "Right", 3 }) },
+  -- Smart splits resizing (Alt+h/j/k/l) — seamless with Neovim
+  split_nav("resize", "h"),
+  split_nav("resize", "j"),
+  split_nav("resize", "k"),
+  split_nav("resize", "l"),
 
   -- Copy mode with vi keybindings (leader + [)
   { key = "[", mods = "LEADER", action = act.ActivateCopyMode },
