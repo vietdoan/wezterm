@@ -72,11 +72,11 @@ config.keys = {
   { key = "k", mods = "LEADER", action = act.ActivatePaneDirection("Up") },
   { key = "l", mods = "LEADER", action = act.ActivatePaneDirection("Right") },
 
-  -- Pane resize (leader + H/J/K/L, 10 cells at a time)
-  { key = "H", mods = "LEADER|SHIFT", action = act.AdjustPaneSize({ "Left", 10 }) },
-  { key = "J", mods = "LEADER|SHIFT", action = act.AdjustPaneSize({ "Down", 10 }) },
-  { key = "K", mods = "LEADER|SHIFT", action = act.AdjustPaneSize({ "Up", 10 }) },
-  { key = "L", mods = "LEADER|SHIFT", action = act.AdjustPaneSize({ "Right", 10 }) },
+  -- Pane resize (Alt + h/j/k/l) — matches smart-splits.nvim resize keys
+  { key = "h", mods = "ALT", action = act.AdjustPaneSize({ "Left", 3 }) },
+  { key = "j", mods = "ALT", action = act.AdjustPaneSize({ "Down", 3 }) },
+  { key = "k", mods = "ALT", action = act.AdjustPaneSize({ "Up", 3 }) },
+  { key = "l", mods = "ALT", action = act.AdjustPaneSize({ "Right", 3 }) },
 
   -- Copy mode with vi keybindings (leader + [)
   { key = "[", mods = "LEADER", action = act.ActivateCopyMode },
