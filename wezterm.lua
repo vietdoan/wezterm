@@ -6,6 +6,7 @@ local config = wezterm.config_builder()
 config.leader = { key = "a", mods = "CTRL", timeout_milliseconds = 1000 }
 
 -- General settings
+config.color_scheme = "Catppuccin Mocha"
 config.scrollback_lines = 50000
 config.term = "xterm-256color"
 
